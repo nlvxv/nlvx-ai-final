@@ -137,6 +137,14 @@ body {
 .sidebar-footer {
     border-top: 1px solid var(--border-color);
     padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Add gap between footer buttons */
+}
+
+.sidebar-button.danger:hover {
+    background-color: rgba(255, 59, 48, 0.2); /* Apple Red, translucent */
+    color: #ff3b30;
 }
 
 /* --- Main Chat Area --- */
@@ -156,6 +164,8 @@ body {
     -webkit-backdrop-filter: blur(20px);
     flex-shrink: 0;
     z-index: 10;
+    display: flex; /* Added for menu button alignment */
+    align-items: center; /* Added for menu button alignment */
 }
 
 .chat-box {
@@ -402,4 +412,70 @@ body {
     color: var(--text-color);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     transform: scale(1.05);
+}
+
+/* --- RESPONSIVE DESIGN (FOR MOBILE & TABLETS) --- */
+/* This section applies styles only on screens smaller than 768px */
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* Stack sidebar and chat vertically */
+    }
+
+    /* --- Responsive Sidebar --- */
+    .sidebar {
+        position: fixed; /* Make it an overlay */
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 200; /* Make sure it's on top of everything */
+        transform: translateX(-100%); /* Hide it off-screen to the left */
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        width: 280px; /* A bit wider for mobile */
+    }
+
+    .sidebar.is-open {
+        transform: translateX(0); /* Slide it into view */
+        box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    }
+
+    /* --- Responsive Chat Container --- */
+    .chat-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .chat-header {
+        padding: 0.75rem 1rem;
+    }
+
+    /* --- Menu Button (Hamburger Icon) --- */
+    .menu-btn {
+        display: block; /* Show the button on mobile */
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .chat-box {
+        padding: 1rem;
+    }
+
+    .message {
+        max-width: 90%; /* Allow messages to be a bit wider on mobile */
+    }
+
+    .chat-input-area {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* --- Styles for screens larger than 768px (Desktops) --- */
+@media (min-width: 769px) {
+    .menu-btn {
+        display: none; /* Hide the menu button on desktops */
+    }
 }
