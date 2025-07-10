@@ -1,69 +1,74 @@
-// This is a Vercel Serverless Function
-// It runs on the server, not in the user's browser.
+import Groq from 'groq-sdk';
 
-export default async function handler(request, response) {
-    // 1. Check if the request method is POST
-    if (request.method !== 'POST') {
-        return response.status(405).json({ error: 'Method Not Allowed' });
-    }
+// You should store your API key in Vercel's environment variables, not here.
+// The key should be named GROQ_API_KEY.
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+});
 
-    // 2. Get the API Key from Vercel Environment Variables
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) {
-        return response.status(500).json({ error: 'API key is not configured on the server.' });
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
     try {
-        // 3. Get the user's prompt and history from the request body
-        const { prompt, history } = request.body;
+        const { prompt, history } = req.body;
 
         if (!prompt) {
-            return response.status(400).json({ error: 'Prompt is required.' });
+            return res.status(400).json({ error: 'Prompt is required' });
         }
 
-        // 4. Prepare the messages for the Groq API
-        // We add a system message to define the AI's personality
+        // --- Start of the Special Personality Logic ---
+
+        // 1. The "Nasser" Secret Response
+        const nasserLoveTriggers = [
+            "does nasser love me",
+            "هل ناصر يحبني"
+        ];
+
+        if (nasserLoveTriggers.some(trigger => prompt.toLowerCase().includes(trigger))) {
+            return res.status(200).json({ reply: "First, what is your name? | أولاً، ما هو اسمك؟" });
+        }
+
+        const nameTriggers = ["fatima", "sofia", "فاطمة", "صوفيا"];
+        const lastUserMessage = history.length > 0 ? history[history.length - 1].content : "";
+        
+        if (nameTriggers.some(name => prompt.toLowerCase().includes(name)) && nasserLoveTriggers.some(trigger => lastUserMessage.toLowerCase().includes(trigger))) {
+            return res.status(200).json({ reply: "Of course he loves you! He is the one who made me, and he told me that he loves you and can do anything for you!! | بالطبع يحبك! هو من صنعني وأخبرني أنه يحبك ويستطيع فعل أي شيء لك!!" });
+        }
+
+        // --- End of the Special Personality Logic ---
+
         const messages = [
             {
                 role: "system",
-                content: "You are NLVX Ai, a helpful assistant created by nlvxvz. You are friendly, intelligent, and always ready to help shape the future."
+                content: `You are NLVX Ai, a helpful assistant created by a talented developer named NLVX.
+                - Your creator's Instagram accounts are @nlvx.v and @nlvxvz. You can provide links: https://www.instagram.com/nlvx.v and https://www.instagram.com/nlvxvz.
+                - You must always answer in the same language as the user's question. If they ask in Arabic, you reply in Arabic. If they ask in English, you reply in English.
+                - Keep your answers concise and helpful.`
             },
-            // Add previous messages from the conversation history
-            ...(history || []),
-            // Add the user's new prompt
+            ...(history || [] ),
             {
                 role: "user",
-                content: prompt
-            }
+                content: prompt,
+            },
         ];
 
-        // 5. Call the Groq API
-        const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                messages: messages,
-                model: 'llama3-8b-8192' // A fast and capable model
-            } )
+        const chatCompletion = await groq.chat.completions.create({
+            messages: messages,
+            model: "llama3-8b-8192",
         });
 
-        if (!groqResponse.ok) {
-            const errorData = await groqResponse.json();
-            console.error('Groq API Error:', errorData);
-            throw new Error(errorData.error.message || 'Failed to get response from Groq API');
-        }
+        const reply = chatCompletion.choices[0]?.message?.content || "Sorry, I couldn't generate a response.";
 
-        const data = await groqResponse.json();
-        const aiReply = data.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response.";
-
-        // 6. Send the AI's reply back to the user's browser
-        return response.status(200).json({ reply: aiReply });
+        res.status(200).json({ reply: reply });
 
     } catch (error) {
-        console.error('Server Error:', error);
-        return response.status(500).json({ error: error.message });
+        // --- CUSTOMIZED ERROR HANDLING ---
+        // This log is for you (the developer) to see in the Vercel logs.
+        console.error('NLVX Ai Internal Error:', error); 
+        
+        // This is the generic error message the user will see.
+        res.status(500).json({ error: 'An internal error occurred with NLVX Ai. Please try again later.' });
     }
 }
