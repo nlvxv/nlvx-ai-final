@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NLVX Ai</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css"> <!-- Added slash for consistency -->
 </head>
 <body>
     <!-- Sidebar -->
@@ -30,9 +30,7 @@
         <div class="chat-header">
             <h1 id="chat-title">NLVX Ai</h1>
         </div>
-        <div id="chat-box" class="chat-box">
-            <!-- Chat messages will be dynamically added here -->
-        </div>
+        <div id="chat-box" class="chat-box"></div>
         <div class="chat-input-area">
             <textarea id="user-input" data-key-placeholder="ask_me_anything" placeholder="Ask me anything..." rows="1"></textarea>
             <button id="mic-btn" title="Use Voice">
@@ -92,6 +90,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- CRITICAL FIX: Added slash to the script path -->
+    <script src="/script.js"></script>
 </body>
 </html>
