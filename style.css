@@ -46,6 +46,11 @@
     padding: 0;
 }
 
+html {
+    /* For smoother scrolling, especially on mobile */
+    scroll-behavior: smooth;
+}
+
 body {
     /* This font stack prioritizes Apple's official fonts */
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -209,6 +214,7 @@ body {
     background-color: var(--secondary-bg-color);
     border: 1px solid var(--border-color);
     line-height: 1.6;
+    word-wrap: break-word; /* Ensure long words don't overflow */
 }
 
 .message.user {
@@ -272,6 +278,8 @@ body {
     font-size: 1.1rem;
     resize: none;
     transition: border-color 0.3s ease;
+    max-height: 150px; /* Prevent it from growing too tall */
+    overflow-y: auto;
 }
 #user-input:focus {
     outline: none;
@@ -419,7 +427,8 @@ body {
 
 @media (max-width: 768px) {
     body {
-        flex-direction: column; /* Stack sidebar and chat vertically */
+        /* This makes the main chat container the only scrollable area */
+        overflow: hidden;
     }
 
     /* --- Responsive Sidebar --- */
@@ -431,7 +440,8 @@ body {
         z-index: 200; /* Make sure it's on top of everything */
         transform: translateX(-100%); /* Hide it off-screen to the left */
         transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        width: 280px; /* A bit wider for mobile */
+        width: 85%; /* Use percentage for better fit */
+        max-width: 320px; /* But don't let it get too wide */
     }
 
     .sidebar.is-open {
@@ -442,7 +452,7 @@ body {
     /* --- Responsive Chat Container --- */
     .chat-container {
         width: 100%;
-        height: 100%;
+        height: 100vh; /* Full viewport height */
     }
 
     .chat-header {
