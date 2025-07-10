@@ -1,0 +1,389 @@
+/* --- Legendary v2 Theme --- */
+:root {
+    /* Using Apple's Design System Colors */
+    --light-bg: #f5f5f7; /* Light Gray */
+    --light-secondary-bg: rgba(255, 255, 255, 0.7); /* Translucent White */
+    --light-text: #1d1d1f; /* Near Black */
+    --light-border: rgba(0, 0, 0, 0.1);
+    --light-primary: #007aff; /* Apple Blue */
+    --light-primary-text: #ffffff;
+    --light-muted-text: #6e6e73;
+
+    --dark-bg: #1d1d1f; /* Near Black */
+    --dark-secondary-bg: rgba(40, 40, 40, 0.7); /* Translucent Dark Gray */
+    --dark-text: #f5f5f7; /* Off-white */
+    --dark-border: rgba(255, 255, 255, 0.15);
+    --dark-primary: #0a84ff; /* Brighter Apple Blue for Dark Mode */
+    --dark-primary-text: #ffffff;
+    --dark-muted-text: #8e8e93;
+}
+
+/* --- Applying the Theme --- */
+[data-theme="light"] {
+    --bg-color: var(--light-bg);
+    --secondary-bg-color: var(--light-secondary-bg);
+    --text-color: var(--light-text);
+    --border-color: var(--light-border);
+    --primary-color: var(--light-primary);
+    --primary-text-color: var(--light-primary-text);
+    --muted-text-color: var(--light-muted-text);
+}
+
+[data-theme="dark"] {
+    --bg-color: var(--dark-bg);
+    --secondary-bg-color: var(--dark-secondary-bg);
+    --text-color: var(--dark-text);
+    --border-color: var(--dark-border);
+    --primary-color: var(--dark-primary);
+    --primary-text-color: var(--dark-primary-text);
+    --muted-text-color: var(--dark-muted-text);
+}
+
+/* --- Base Styles & Apple Font --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* This font stack prioritizes Apple's official fonts */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* --- Keyframe Animations --- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+/* --- Sidebar with Glassmorphism --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--secondary-bg-color);
+    backdrop-filter: blur(20px); /* The magic for the glassy effect */
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    transition: all 0.4s ease;
+    animation: slideInUp 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.sidebar-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 8px; /* Apple's standard corner radius */
+    border: none;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-button:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+#new-chat-btn {
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    font-weight: 600;
+}
+#new-chat-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+}
+
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 1rem;
+}
+
+.history-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.history-item:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.history-item.active {
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+/* --- Main Chat Area --- */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.chat-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--secondary-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.chat-box {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    max-width: 80%;
+    align-items: flex-start;
+    animation: slideInUp 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.message .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+.message:hover .avatar {
+    transform: scale(1.1);
+}
+
+.message .text {
+    padding: 0.8rem 1.2rem;
+    border-radius: 18px; /* Rounded bubble style */
+    background-color: var(--secondary-bg-color);
+    border: 1px solid var(--border-color);
+    line-height: 1.6;
+}
+
+.message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message.user .text {
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    border: none;
+}
+
+.message.user .avatar {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.message.loading .text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loading-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--muted-text-color);
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+/* --- Input Area --- */
+.chat-input-area {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--secondary-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 0.8rem 1.2rem;
+    border-radius: 20px; /* Pill shape */
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 1.1rem;
+    resize: none;
+    transition: border-color 0.3s ease;
+}
+#user-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+#send-btn, #mic-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+#send-btn:hover, #mic-btn:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+    transform: scale(1.1);
+}
+#mic-btn.is-recording {
+    color: #ff453a; /* Apple Red */
+    animation: pulse 1.5s infinite;
+}
+
+/* --- Modal Styles --- */
+.modal-content {
+    background-color: var(--secondary-bg-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 450px; /* Made it slightly wider for more languages */
+    position: relative;
+    animation: slideInUp 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.close-btn {
+    color: var(--muted-text-color);
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.close-btn:hover {
+    color: var(--text-color);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.setting-item {
+    margin-bottom: 1.5rem;
+}
+.setting-item:last-child {
+    margin-bottom: 0;
+}
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--muted-text-color);
+}
+.setting-item input, .setting-item select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-family: inherit;
+}
+.setting-item select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e" );
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* NEW: Segmented Control for Theme and Language */
+.segmented-control {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+    gap: 0.5rem;
+    background-color: var(--bg-color);
+    padding: 0.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+.segmented-control button {
+    flex: 1 1 auto; /* Allow buttons to grow and shrink */
+    min-width: 50px; /* Minimum width for each button */
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--muted-text-color);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem; /* Adjusted for text */
+    font-weight: 500;
+}
+.segmented-control button:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+    color: var(--text-color);
+}
+.segmented-control button.active {
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transform: scale(1.05);
+}

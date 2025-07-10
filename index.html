@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- The lang attribute will be set by JavaScript -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLVX Ai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <button id="new-chat-btn" class="sidebar-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                <span data-key="new_chat">New Chat</span>
+            </button>
+        </div>
+        <div id="chat-history" class="chat-history"></div>
+        <div class="sidebar-footer">
+            <button id="settings-btn" class="sidebar-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span id="username-display" data-key="settings">Settings</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Chat Container -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1 id="chat-title">NLVX Ai</h1>
+        </div>
+        <div id="chat-box" class="chat-box">
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+        <div class="chat-input-area">
+            <textarea id="user-input" data-key-placeholder="ask_me_anything" placeholder="Ask me anything..." rows="1"></textarea>
+            <button id="mic-btn" title="Use Voice">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
+            </button>
+            <button id="send-btn" title="Send Message">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" title="Close">&times;</span>
+            <h2 data-key="settings">Settings</h2>
+            
+            <div class="setting-item">
+                <label for="username-input" data-key="your_name">Your Name</label>
+                <input type="text" id="username-input" data-key-placeholder="enter_your_name" placeholder="Enter your name">
+            </div>
+
+            <div class="setting-item">
+                <label data-key="theme">Theme</label>
+                <div class="segmented-control" id="theme-switcher">
+                    <button id="light-mode-btn" title="Light Mode">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    </button>
+                    <button id="dark-mode-btn" title="Dark Mode">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label data-key="ui_language">UI Language</label>
+                <div class="segmented-control" id="language-switcher">
+                    <!-- Buttons will be added here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label for="voice-language-select" data-key="voice_language">Voice Language</label>
+                <select id="voice-language-select">
+                    <option value="en-US">English (US )</option>
+                    <option value="ar-SA">العربية (Arabic)</option>
+                    <option value="fr-FR">Français (French)</option>
+                    <option value="es-ES">Español (Spanish)</option>
+                    <option value="de-DE">Deutsch (German)</option>
+                    <option value="ur-PK">اردو (Urdu)</option>
+                    <option value="hi-IN">हिन्दी (Hindi)</option>
+                    <option value="ru-RU">Русский (Russian)</option>
+                    <option value="zh-CN">中文 (Chinese)</option>
+                    <option value="ja-JP">日本語 (Japanese)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
